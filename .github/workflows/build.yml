@@ -9,13 +9,10 @@ jobs:
           submodules: recursive
       - name: Install Theos
         uses: Randomblock1/theos-action@v1
-      - name: Build Package
-        run: |
-          mkdir -p packages
-          sed -i '' 's/export THEOS_PACKAGE_DIR = $(CURDIR)/export THEOS_PACKAGE_DIR = $(CURDIR)\/packages/g' Makefile || true
-          make package FINALPACKAGE=1 -j$(sysctl -n hw.ncpu)
+      - name: Build Package (rootless)
+        run: ./build.sh rootless
       - name: Upload Deb
         uses: actions/upload-artifact@v4
         with:
-          name: RootBridge-deb
-          path: packages/*.deb
+          name: RootBridge-rootless
+          path: build/*rootless.deb
